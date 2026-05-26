@@ -692,13 +692,38 @@
 
   <!-- AUDIO PLAYER FLOTANTE -->
   <div class="audio-player" id="audioPlayer">
-    <button class="audio-btn" id="audioToggle" onclick="toggleNarration()">
-      <span class="audio-icon">🔊</span>
-      <span class="audio-text">Escuchar introducción</span>
-    </button>
-    <div class="audio-progress" id="audioProgress" style="display:none;">
-      <div class="audio-progress-bar" id="audioProgressBar"></div>
+    <div class="audio-card" id="audioCard" style="display:none;">
+      <div class="audio-card-header">
+        <span class="audio-card-icon">🎙️</span>
+        <div>
+          <div class="audio-card-title">Narración</div>
+          <div class="audio-card-sub">Teoría Psicogenética de Piaget</div>
+        </div>
+        <button class="audio-close" onclick="closeAudioCard()">✕</button>
+      </div>
+      <audio id="audioEl" src="audio/narracion.mp3" preload="metadata"></audio>
+      <div class="audio-controls">
+        <button class="audio-play-btn" id="audioPlayBtn" onclick="toggleAudio()">▶</button>
+        <div class="audio-track">
+          <div class="audio-track-bar" id="audioTrackBar">
+            <div class="audio-track-fill" id="audioTrackFill"></div>
+            <div class="audio-track-thumb" id="audioTrackThumb"></div>
+          </div>
+          <div class="audio-times">
+            <span id="audioCurrent">0:00</span>
+            <span id="audioDuration">--:--</span>
+          </div>
+        </div>
+        <input class="audio-volume" id="audioVolume" type="range"
+               min="0" max="1" step="0.05" value="1"
+               oninput="setVolume(this.value)" title="Volumen" />
+        <span class="audio-vol-icon">🔈</span>
+      </div>
     </div>
+    <button class="audio-fab" id="audioFab" onclick="openAudioCard()">
+      <span class="audio-fab-icon">🎙️</span>
+      <span class="audio-fab-text">Escuchar narración</span>
+    </button>
   </div>
 
   <!-- FOOTER -->

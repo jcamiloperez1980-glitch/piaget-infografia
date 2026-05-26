@@ -218,126 +218,75 @@ function resetQuiz() {
 // Init quiz
 renderQuestion();
 
-// ===== AUDIO — Web Speech API =====
-const narrationScript = `
-  Bienvenido a la infografía interactiva sobre la Teoría Psicogenética de Jean Piaget.
+// ===== AUDIO — MP3 propio =====
+const audioEl  = document.getElementById('audioEl');
+const playBtn  = document.getElementById('audioPlayBtn');
+const fill     = document.getElementById('audioTrackFill');
+const thumb    = document.getElementById('audioTrackThumb');
+const curEl    = document.getElementById('audioCurrent');
+const durEl    = document.getElementById('audioDuration');
+const trackBar = document.getElementById('audioTrackBar');
 
-  Jean Piaget fue un biólogo y epistemólogo suizo nacido en 1896 y fallecido en 1980.
-  Su teoría propone que los niños construyen activamente su conocimiento a través
-  de la interacción con el entorno, organizando su experiencia en estructuras mentales
-  llamadas esquemas.
-
-  Piaget identificó cuatro etapas del desarrollo cognitivo.
-
-  Primera: la etapa sensoriomotora, de cero a dos años, donde el bebé conoce el mundo
-  a través de los sentidos y la acción, y adquiere la noción de permanencia del objeto.
-
-  Segunda: la etapa preoperacional, de dos a siete años, donde emerge el lenguaje
-  y el pensamiento simbólico, pero predomina el egocentrismo cognitivo.
-
-  Tercera: la etapa de operaciones concretas, de siete a once años, donde el niño
-  comprende la conservación y la reversibilidad de las operaciones.
-
-  Cuarta: la etapa de operaciones formales, a partir de los once años, donde se desarrolla
-  el pensamiento abstracto e hipotético-deductivo.
-
-  Los dos procesos fundamentales de adaptación son la asimilación, que incorpora
-  nueva información a esquemas existentes, y la acomodación, que modifica los esquemas
-  para adaptarse a la nueva información.
-
-  La equilibración es el motor del desarrollo: cada desequilibrio cognitivo impulsa
-  una reorganización hacia niveles superiores de comprensión.
-
-  Esta teoría tiene profundas implicaciones educativas: el docente no transmite
-  conocimiento, sino que crea ambientes que provocan el descubrimiento activo
-  y el conflicto cognitivo en el estudiante.
-
-  Explora cada sección de esta infografía para profundizar en cada concepto.
-`;
-
-let synth = window.speechSynthesis;
-let utterance = null;
-let isPlaying = false;
-let progressInterval = null;
-
-function toggleNarration() {
-  const btn  = document.getElementById('audioToggle');
-  const icon = btn.querySelector('.audio-icon');
-  const text = btn.querySelector('.audio-text');
-  const prog = document.getElementById('audioProgress');
-  const bar  = document.getElementById('audioProgressBar');
-
-  if (!('speechSynthesis' in window)) {
-    alert('Tu navegador no soporta síntesis de voz. Prueba en Chrome o Edge.');
-    return;
-  }
-
-  if (isPlaying) {
-    synth.cancel();
-    clearInterval(progressInterval);
-    isPlaying = false;
-    icon.textContent = '🔊';
-    text.textContent = 'Escuchar introducción';
-    btn.classList.remove('playing');
-    prog.style.display = 'none';
-    bar.style.width = '0%';
-    return;
-  }
-
-  utterance = new SpeechSynthesisUtterance(narrationScript);
-  utterance.lang = 'es-ES';
-  utterance.rate = 0.92;
-  utterance.pitch = 1.0;
-  utterance.volume = 1.0;
-
-  // Seleccionar voz en español si está disponible
-  const voices = synth.getVoices();
-  const esVoice = voices.find(v => v.lang.startsWith('es') && v.localService) ||
-                  voices.find(v => v.lang.startsWith('es'));
-  if (esVoice) utterance.voice = esVoice;
-
-  utterance.onstart = () => {
-    isPlaying = true;
-    icon.textContent = '⏸';
-    text.textContent = 'Pausar narración';
-    btn.classList.add('playing');
-    prog.style.display = 'block';
-    // Simula progreso basado en duración estimada (~90 segundos)
-    const totalMs = 90000;
-    const startTime = Date.now();
-    progressInterval = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      const pct = Math.min((elapsed / totalMs) * 100, 98);
-      bar.style.width = pct + '%';
-    }, 500);
-  };
-
-  utterance.onend = () => {
-    clearInterval(progressInterval);
-    bar.style.width = '100%';
-    setTimeout(() => {
-      isPlaying = false;
-      icon.textContent = '🔊';
-      text.textContent = 'Escuchar introducción';
-      btn.classList.remove('playing');
-      prog.style.display = 'none';
-      bar.style.width = '0%';
-    }, 600);
-  };
-
-  utterance.onerror = () => {
-    clearInterval(progressInterval);
-    isPlaying = false;
-    icon.textContent = '🔊';
-    text.textContent = 'Escuchar introducción';
-    btn.classList.remove('playing');
-    prog.style.display = 'none';
-  };
-
-  synth.speak(utterance);
+function fmt(s) {
+  if (isNaN(s)) return '--:--';
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60).toString().padStart(2, '0');
+  return `${m}:${sec}`;
 }
 
-// Cargar voces (algunos navegadores las cargan de forma asíncrona)
-if (speechSynthesis.onvoiceschanged !== undefined) {
-  speechSynthesis.onvoiceschanged = () => { synth.getVoices(); };
+audioEl && audioEl.addEventListener('loadedmetadata', () => {
+  durEl.textContent = fmt(audioEl.duration);
+});
+
+audioEl && audioEl.addEventListener('timeupdate', () => {
+  if (!audioEl.duration) return;
+  const pct = (audioEl.currentTime / audioEl.duration) * 100;
+  fill.style.width  = pct + '%';
+  thumb.style.left  = pct + '%';
+  curEl.textContent = fmt(audioEl.currentTime);
+});
+
+audioEl && audioEl.addEventListener('ended', () => {
+  playBtn.textContent = '▶';
+  fill.style.width  = '0%';
+  thumb.style.left  = '0%';
+  curEl.textContent = '0:00';
+  audioEl.currentTime = 0;
+});
+
+// Clic en la barra para saltar
+trackBar && trackBar.addEventListener('click', (e) => {
+  if (!audioEl.duration) return;
+  const rect = trackBar.getBoundingClientRect();
+  const pct  = (e.clientX - rect.left) / rect.width;
+  audioEl.currentTime = pct * audioEl.duration;
+});
+
+function toggleAudio() {
+  if (!audioEl) return;
+  if (audioEl.paused) {
+    audioEl.play();
+    playBtn.textContent = '⏸';
+  } else {
+    audioEl.pause();
+    playBtn.textContent = '▶';
+  }
+}
+
+function setVolume(val) {
+  if (audioEl) audioEl.volume = parseFloat(val);
+  document.querySelector('.audio-vol-icon').textContent =
+    val > 0.5 ? '🔊' : val > 0 ? '🔉' : '🔇';
+}
+
+function openAudioCard() {
+  document.getElementById('audioCard').style.display = 'block';
+  document.getElementById('audioFab').style.display  = 'none';
+}
+
+function closeAudioCard() {
+  if (audioEl && !audioEl.paused) audioEl.pause();
+  playBtn.textContent = '▶';
+  document.getElementById('audioCard').style.display = 'none';
+  document.getElementById('audioFab').style.display  = 'flex';
 }
