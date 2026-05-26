@@ -26,6 +26,7 @@
       <li><a href="#educacion">Educación</a></li>
       <li><a href="#video">Video</a></li>
       <li><a href="#quiz">Quiz</a></li>
+      <li><a href="#bibliografia">Bibliografía</a></li>
     </ul>
     <button class="nav-toggle" id="navToggle">☰</button>
   </nav>
@@ -604,6 +605,101 @@
       <button class="quiz-btn" onclick="resetQuiz()">🔄 Intentar de nuevo</button>
     </div>
   </section>
+
+  <!-- SECCIÓN 9: BIBLIOGRAFÍA -->
+  <section class="section" id="bibliografia">
+    <div class="section-header">
+      <div class="section-number">09</div>
+      <div>
+        <h2 class="section-title">Bibliografía</h2>
+        <p class="section-subtitle">Referencias en Normas APA — Séptima Edición</p>
+      </div>
+    </div>
+
+    <div class="bib-container reveal">
+
+      <div class="bib-category">
+        <div class="bib-cat-label">📖 Lecturas de la actividad</div>
+        <ol class="bib-list">
+          <li class="bib-entry">
+            Bálsamo-Estévez, C. (2022). <em>Teoría psicogenética de Piaget.</em>
+            Repositorio académico.
+          </li>
+          <li class="bib-entry">
+            Terapia Cognitiva. (2015). <em>Teoría del desarrollo cognitivo de Piaget.</em>
+            Terapia Cognitiva.
+          </li>
+          <li class="bib-entry">
+            Pozo, J. I. (1989). La teoría del aprendizaje de Piaget y sus consecuencias
+            para la práctica educativa. En <em>Teorías cognitivas del aprendizaje</em>
+            (pp. 165–198). Morata.
+            <a class="bib-link" href="https://dialnet.unirioja.es/servlet/articulo?codigo=2747352"
+               target="_blank" rel="noopener">Dialnet →</a>
+          </li>
+        </ol>
+      </div>
+
+      <div class="bib-category">
+        <div class="bib-cat-label">🔬 Obras primarias de Piaget</div>
+        <ol class="bib-list" start="4">
+          <li class="bib-entry">
+            Piaget, J. (1952). <em>The origins of intelligence in children.</em>
+            International Universities Press.
+            <a class="bib-link" href="https://doi.org/10.1037/11494-000"
+               target="_blank" rel="noopener">https://doi.org/10.1037/11494-000</a>
+          </li>
+          <li class="bib-entry">
+            Piaget, J. (1964). Development and learning.
+            <em>Journal of Research in Science Teaching, 2</em>(3), 176–186.
+            <a class="bib-link" href="https://doi.org/10.1002/tea.3660020306"
+               target="_blank" rel="noopener">https://doi.org/10.1002/tea.3660020306</a>
+          </li>
+          <li class="bib-entry">
+            Piaget, J., &amp; Inhelder, B. (1969). <em>The psychology of the child.</em>
+            Basic Books.
+          </li>
+        </ol>
+      </div>
+
+      <div class="bib-category">
+        <div class="bib-cat-label">📚 Fuentes secundarias</div>
+        <ol class="bib-list" start="7">
+          <li class="bib-entry">
+            Flavell, J. H. (1963). <em>The developmental psychology of Jean Piaget.</em>
+            Van Nostrand. <a class="bib-link" href="https://doi.org/10.1037/11505-000"
+               target="_blank" rel="noopener">https://doi.org/10.1037/11505-000</a>
+          </li>
+          <li class="bib-entry">
+            Papalia, D. E., Feldman, R. D., &amp; Martorell, G. (2012).
+            <em>Desarrollo humano</em> (12.ª ed.). McGraw-Hill.
+          </li>
+          <li class="bib-entry">
+            Wadsworth, B. J. (2004). <em>Piaget's theory of cognitive and affective
+            development: Foundations of constructivism</em> (5.ª ed.). Longman.
+          </li>
+        </ol>
+      </div>
+
+      <div class="bib-apa-note">
+        <span>📋</span>
+        <p>Referencias organizadas según el <strong>Manual de Publicaciones de la American
+        Psychological Association, 7.ª edición (APA, 2020).</strong> Formato: apellido,
+        inicial(es). (año). <em>Título en cursiva.</em> Editorial. DOI/URL.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- AUDIO PLAYER FLOTANTE -->
+  <div class="audio-player" id="audioPlayer">
+    <button class="audio-btn" id="audioToggle" onclick="toggleNarration()">
+      <span class="audio-icon">🔊</span>
+      <span class="audio-text">Escuchar introducción</span>
+    </button>
+    <div class="audio-progress" id="audioProgress" style="display:none;">
+      <div class="audio-progress-bar" id="audioProgressBar"></div>
+    </div>
+  </div>
 
   <!-- FOOTER -->
   <footer class="footer">
