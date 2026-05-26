@@ -473,6 +473,55 @@ body {
   border-radius: 50px;
 }
 
+/* Stage images */
+.stage-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.stage-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.timeline-content:hover .stage-img {
+  transform: scale(1.05);
+}
+.stage-img-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.75rem 1rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.timeline-content:hover .stage-img-overlay {
+  opacity: 1;
+}
+.stage-img-overlay span {
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+/* Créditos Unsplash (requerido por licencia) */
+.timeline-content::after {
+  content: '📷 Unsplash';
+  display: block;
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.25);
+  margin-top: 0.75rem;
+  text-align: right;
+}
+
 /* Stage selector */
 .stage-selector {
   background: rgba(255,255,255,0.04);
