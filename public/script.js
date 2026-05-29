@@ -160,14 +160,13 @@ function selectAnswer(index, btn) {
     btn.classList.add('correct');
     feedbackEl.classList.add('correct');
     score++;
+    feedbackEl.textContent = q.feedback;
   } else {
     btn.classList.add('wrong');
     feedbackEl.classList.add('wrong');
     buttons[q.correct].classList.add('correct');
-    feedbackEl.textContent = '❌ Incorrecto. ';
+    feedbackEl.textContent = q.feedback.replace(/^✅ Correcto\.\s*/, '❌ Incorrecto. ');
   }
-
-  feedbackEl.textContent = q.feedback;
   document.getElementById('quizOptions').appendChild(feedbackEl);
   document.getElementById('quizNext').style.display = 'inline-block';
 }
@@ -289,4 +288,152 @@ function closeAudioCard() {
   playBtn.textContent = '▶';
   document.getElementById('audioCard').style.display = 'none';
   document.getElementById('audioFab').style.display  = 'flex';
+}
+
+// ===== ACTIVIDAD DRAG & DROP — ORDENA LAS ETAPAS =====
+(function initDragActivity() {
+  let dragging = null;   // card being dragged (mouse/pointer)
+  let selected = null;   // card selected via tap (touch/click)
+
+  const bank  = document.getElementById('cardBank');
+  if (!bank) return;    // section not in DOM
+
+  // ── Helpers ──
+  function clearFeedback() {
+    const fb = document.getElementById('dragFeedback');
+    fb.textContent = '';
+    fb.className = 'activity-feedback';
+    document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('correct', 'wrong'));
+  }
+
+  function placeCard(card, zone) {
+    if (!card || !zone) return;
+    // If zone already has a card, send it back to bank
+    const existing = zone.querySelector('.drag-card');
+    if (existing && existing !== card) {
+      bank.appendChild(existing);
+      existing.classList.remove('selected');
+    }
+    zone.appendChild(card);
+    card.classList.remove('selected');
+    clearFeedback();
+  }
+
+  // ── HTML5 drag events (mouse) ──
+  bank.addEventListener('dragstart', e => {
+    const card = e.target.closest('.drag-card');
+    if (!card) return;
+    dragging = card;
+    card.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+
+  document.addEventListener('dragend', () => {
+    if (dragging) { dragging.classList.remove('dragging'); dragging = null; }
+  });
+
+  document.querySelectorAll('.drop-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => {
+      e.preventDefault();
+      zone.classList.add('drag-over');
+    });
+    zone.addEventListener('dragleave', e => {
+      if (!zone.contains(e.relatedTarget)) zone.classList.remove('drag-over');
+    });
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      if (dragging) { placeCard(dragging, zone); dragging = null; }
+    });
+  });
+
+  // Also allow dragging back to bank
+  bank.addEventListener('dragover', e => { e.preventDefault(); bank.style.borderColor = 'var(--blue)'; });
+  bank.addEventListener('dragleave', () => { bank.style.borderColor = ''; });
+  bank.addEventListener('drop', e => {
+    e.preventDefault();
+    bank.style.borderColor = '';
+    if (dragging) { bank.appendChild(dragging); dragging.classList.remove('dragging'); dragging = null; clearFeedback(); }
+  });
+
+  // ── Click/tap fallback (works on mobile) ──
+  document.addEventListener('click', e => {
+    const card = e.target.closest('.drag-card');
+    const zone = e.target.closest('.drop-zone');
+    const isBank = e.target.closest('#cardBank');
+
+    if (card) {
+      // Toggle selection on card
+      if (selected === card) {
+        card.classList.remove('selected');
+        selected = null;
+      } else {
+        if (selected) selected.classList.remove('selected');
+        selected = card;
+        card.classList.add('selected');
+      }
+      return;
+    }
+
+    if (zone && selected) {
+      placeCard(selected, zone);
+      selected = null;
+      return;
+    }
+
+    if (isBank && selected) {
+      // Tap on bank background → return selected card to bank
+      bank.appendChild(selected);
+      selected.classList.remove('selected');
+      selected = null;
+      clearFeedback();
+    }
+  });
+})();
+
+// ── Check / Reset (global, called from HTML) ──
+function checkDragOrder() {
+  const zones = document.querySelectorAll('.drop-zone');
+  let allFilled = true;
+  let allCorrect = true;
+
+  zones.forEach(zone => {
+    const card = zone.querySelector('.drag-card');
+    if (!card) {
+      allFilled = false;
+    } else if (card.dataset.key === zone.dataset.expected) {
+      zone.classList.add('correct');
+      zone.classList.remove('wrong');
+    } else {
+      zone.classList.add('wrong');
+      zone.classList.remove('correct');
+      allCorrect = false;
+    }
+  });
+
+  const fb = document.getElementById('dragFeedback');
+  fb.classList.add('show');
+
+  if (!allFilled) {
+    fb.className = 'activity-feedback show warning';
+    fb.textContent = '⚠️ Coloca todas las tarjetas en los casilleros antes de verificar.';
+  } else if (allCorrect) {
+    fb.className = 'activity-feedback show correct';
+    fb.textContent = '🏆 ¡Perfecto! Ordenaste correctamente las cuatro etapas: Sensoriomotora → Preoperacional → Operaciones Concretas → Operaciones Formales. ¡Dominas la secuencia de Piaget!';
+  } else {
+    fb.className = 'activity-feedback show wrong';
+    fb.textContent = '❌ Hay etapas en posición incorrecta (marcadas en rojo). Recuerda: el orden sigue el ciclo de vida, de 0 a más de 11 años. ¡Inténtalo de nuevo!';
+  }
+}
+
+function resetDragOrder() {
+  const bank = document.getElementById('cardBank');
+  document.querySelectorAll('.drag-card').forEach(card => {
+    bank.appendChild(card);
+    card.classList.remove('selected', 'dragging');
+  });
+  document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('correct', 'wrong', 'drag-over'));
+  const fb = document.getElementById('dragFeedback');
+  fb.textContent = '';
+  fb.className = 'activity-feedback';
 }

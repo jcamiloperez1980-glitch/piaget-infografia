@@ -24,6 +24,7 @@
       <li><a href="#equilibracion">Equilibración</a></li>
       <li><a href="#pensamiento">Pensamiento</a></li>
       <li><a href="#educacion">Educación</a></li>
+      <li><a href="#actividad">Actividad</a></li>
       <li><a href="#video">Video</a></li>
       <li><a href="#quiz">Quiz</a></li>
       <li><a href="#bibliografia">Bibliografía</a></li>
@@ -569,10 +570,84 @@
     </div>
   </section>
 
-  <!-- SECCIÓN 7: VIDEO -->
+  <!-- SECCIÓN 7: ACTIVIDAD INTERACTIVA -->
+  <section class="section" id="actividad">
+    <div class="section-header">
+      <div class="section-number">07</div>
+      <div>
+        <h2 class="section-title">Actividad Interactiva</h2>
+        <p class="section-subtitle">Arrastra y ordena las etapas del desarrollo</p>
+      </div>
+    </div>
+
+    <div class="activity-card reveal">
+      <div class="activity-intro">
+        <h3 class="activity-title">🔢 Ordena las Etapas del Desarrollo Cognitivo</h3>
+        <p class="activity-desc">
+          Arrastra cada tarjeta hasta el casillero que le corresponde según el orden cronológico de Piaget —
+          de la etapa más temprana a la más tardía.<br>
+          <em>En móvil: toca una tarjeta para seleccionarla y luego toca el casillero destino.</em>
+        </p>
+      </div>
+
+      <!-- Banco de tarjetas (orden aleatorio) -->
+      <p class="drag-bank-label">Tarjetas disponibles</p>
+      <div class="card-bank" id="cardBank">
+        <div class="drag-card" draggable="true" data-key="formales">
+          <span class="dc-icon">🧮</span>
+          <span class="dc-name">Operaciones Formales</span>
+          <span class="dc-age">11+ años</span>
+        </div>
+        <div class="drag-card" draggable="true" data-key="sensoriomotora">
+          <span class="dc-icon">🍼</span>
+          <span class="dc-name">Sensoriomotora</span>
+          <span class="dc-age">0–2 años</span>
+        </div>
+        <div class="drag-card" draggable="true" data-key="concretas">
+          <span class="dc-icon">📐</span>
+          <span class="dc-name">Op. Concretas</span>
+          <span class="dc-age">7–11 años</span>
+        </div>
+        <div class="drag-card" draggable="true" data-key="preoperacional">
+          <span class="dc-icon">🖊️</span>
+          <span class="dc-name">Preoperacional</span>
+          <span class="dc-age">2–7 años</span>
+        </div>
+      </div>
+
+      <!-- Casilleros numerados -->
+      <p class="drag-bank-label" style="margin-top:1.5rem;">Orden cronológico correcto →</p>
+      <div class="drop-layout">
+        <div class="drop-zone" data-order="1" data-expected="sensoriomotora">
+          <div class="dz-num">1</div>
+          <div class="dz-placeholder">Primera etapa</div>
+        </div>
+        <div class="drop-zone" data-order="2" data-expected="preoperacional">
+          <div class="dz-num">2</div>
+          <div class="dz-placeholder">Segunda etapa</div>
+        </div>
+        <div class="drop-zone" data-order="3" data-expected="concretas">
+          <div class="dz-num">3</div>
+          <div class="dz-placeholder">Tercera etapa</div>
+        </div>
+        <div class="drop-zone" data-order="4" data-expected="formales">
+          <div class="dz-num">4</div>
+          <div class="dz-placeholder">Cuarta etapa</div>
+        </div>
+      </div>
+
+      <div class="activity-controls">
+        <button class="activity-btn" onclick="checkDragOrder()">✔ Verificar orden</button>
+        <button class="activity-btn secondary" onclick="resetDragOrder()">↺ Reiniciar</button>
+      </div>
+      <div class="activity-feedback" id="dragFeedback"></div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 8: VIDEO -->
   <section class="section section-dark" id="video">
     <div class="section-header">
-      <div class="section-number light">07</div>
+      <div class="section-number light">08</div>
       <div>
         <h2 class="section-title light">Video Explicativo</h2>
         <p class="section-subtitle light">Teoría Psicogenética de Jean Piaget</p>
@@ -600,10 +675,10 @@
     </div>
   </section>
 
-  <!-- SECCIÓN 8: QUIZ -->
+  <!-- SECCIÓN 9: QUIZ -->
   <section class="section" id="quiz">
     <div class="section-header">
-      <div class="section-number">08</div>
+      <div class="section-number">09</div>
       <div>
         <h2 class="section-title">Quiz Interactivo</h2>
         <p class="section-subtitle">¿Cuánto aprendiste sobre Piaget?</p>
@@ -638,10 +713,10 @@
     </div>
   </section>
 
-  <!-- SECCIÓN 9: BIBLIOGRAFÍA -->
+  <!-- SECCIÓN 10: BIBLIOGRAFÍA -->
   <section class="section" id="bibliografia">
     <div class="section-header">
-      <div class="section-number">09</div>
+      <div class="section-number">10</div>
       <div>
         <h2 class="section-title">Bibliografía</h2>
         <p class="section-subtitle">Referencias en Normas APA — Séptima Edición</p>
